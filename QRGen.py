@@ -1,7 +1,10 @@
 """
-Author  : Jon Freivald
-Date    : 10/17/2024
-Purpose : Generate QR Codes
+Author      : Jon Freivald
+Date        : 10/17/2024
+Purpose     : Generate QR Codes
+Copyright   : 2024, Blue Ridge Medical Center
+License     : MIT
+Change log  : at eof
 """
 
 # Distribution license for PySimpleGUI v5
@@ -9,6 +12,8 @@ PySimpleGUI_License = 'eEygJDMKaqWCNxlnb8nCNQlXViHAlWwQZrSVI66MIgkuRhpncx3hRhyza
 
 import PySimpleGUI as sg
 import segno
+import os
+import subprocess
 
 BRMC = {'BACKGROUND': '#73afb6',
                  'TEXT': '#00446a',
@@ -21,31 +26,42 @@ BRMC = {'BACKGROUND': '#73afb6',
                  }
 sg.theme_add_new('BRMC', BRMC)
 
-progver = 'v 0.1'
+progver = 'v 0.2'
 mainTheme = 'BRMC'
 errorTheme = 'HotDogStand'
 
 def make_code():
+    name = subprocess.check_output(
+        'net user "%USERNAME%" /domain | find /I "Full Name"', shell=True, text=True
+    )
+    full_name = name.replace("Full Name", "").strip()
+    first_name = full_name.split()[0]
     sg.theme(mainTheme)
-    layout = [ [sg.Text("Data to encode: "), sg.InputText(size=(80,None), key='qrdat')],
+    layout = [ [sg.Text(f"Welcome {first_name}")],
+              [sg.Text("Data to encode: "), sg.InputText(size=(80,None), key='qrdat')],
               [sg.Text("Filename: "), sg.InputText(size=(40,None), key='filnam'), sg.Text(".png")],
-              [sg.Button('Create', bind_return_key=True), sg.Button('Cancel')]]
-    window = sg.Window("Create QR Code", layout, element_justification='center', modal=True, finalize=True)
+              [sg.Button('Create'), sg.Button('Done')],
+              [sg.Text("", key='msg')]]
+    window = sg.Window(f"Create QR Code {progver}", layout, element_justification='center', modal=True, finalize=True)
     window.BringToFront()
     window['qrdat'].set_focus()
     while True:
         event, values = window.read()
-        if event in (sg.WIN_CLOSED, 'Cancel'):
+        if event in (sg.WIN_CLOSED, 'Done'):
             window.close()
             return
         if event == 'Create':
-            fileroot = values['filnam']
-            file = f'{fileroot}.png'
-            qrcode = segno.make_qr(values['qrdat'])
-            qrcode.save(
-                file,
-                scale=5,
-            )
+            window['msg'].update("")
+            if values['qrdat']:
+                if values['filnam']:
+                    fileroot = values['filnam']
+                    file = f'{os.path.expanduser("~")}/Downloads/{fileroot}.png'
+                    qrcode = segno.make_qr(values['qrdat'])
+                    qrcode.save(
+                        file,
+                        scale=5,
+                    )
+                    window['msg'].update(f"QR Code saved to: {file}")
             window['qrdat'].update("")
             window['filnam'].update("")
 
@@ -56,4 +72,6 @@ if __name__ == '__main__':
 
 """
 v 0.1   : 10/17/24  : Initial version -- PySimpleGUI wrapper around segno library to generate QR codes.
+v 0.2   : 10/18/24  : Fleshed it out a little -- won't create an empty file, saves to (Windows) users Downloads directory, 
+                    : greets user by name.
 """
