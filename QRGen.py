@@ -27,7 +27,7 @@ BRMC = {'BACKGROUND': '#73afb6',
                  }
 sg.theme_add_new('BRMC', BRMC)
 
-progver = 'v 0.3'
+progver = 'v 0.4'
 mainTheme = 'BRMC'
 errorTheme = 'HotDogStand'
 
@@ -41,7 +41,7 @@ def make_code():
     sg.theme(mainTheme)
     layout = [ [sg.Text(f"Welcome {first_name}")],
               [sg.Text("Data to encode: "), sg.InputText(size=(80,None), key='qrdat')],
-              [sg.Text("--OR--")],
+              [sg.Text("--OR--", text_color='red', background_color='yellow')],
               [sg.Text("Name:             "), sg.InputText(size=(60,None), key='vCname'), sg.Text('Format: "Last; First"')],
               [sg.Text("Display Name: "), sg.InputText(size=(60,None), key='vCdname')],
               [sg.Text("Org:                "), sg.InputText(size=(60,None), key='vCorg')],
@@ -49,9 +49,9 @@ def make_code():
               [sg.Text("Phone:            "), sg.InputText(size=(14,None), key='vCphone')],
               [sg.Text("EMail:             "), sg.InputText(size=(50,None), key='vCemail')],
               [sg.Text("URL:               "), sg.InputText(size=(60,None), key='vCurl')],
-              [sg.Text("--AND--")],
+              [sg.Text("--AND--", text_color='red', background_color='yellow')],
               [sg.Text("Filename: "), sg.InputText(size=(40,None), key='filnam'), sg.Text(".png")],
-              [sg.Button('Create', bind_return_key=True), sg.Button('Done')],
+              [sg.Button('Create', bind_return_key=True, button_color=('yellow', 'green')), sg.Button('Done', button_color=('yellow', 'red'))],
               [sg.Text("", key='msg')]]
     window = sg.Window(f"Create QR Code {progver}", layout, element_justification='left', modal=True, finalize=True)
     window.BringToFront()
@@ -96,4 +96,5 @@ v 0.1   : 10/17/24  : Initial version -- PySimpleGUI wrapper around segno librar
 v 0.2   : 10/18/24  : Fleshed it out a little -- won't create an empty file, saves to (Windows) users Downloads directory, 
                     : greets user by name.
 v 0.3   : 11/5/24   : Added the ability to create a vCard.
+v 0.4   : 11/5/24   : Simple UI tweaks
 """
