@@ -3,6 +3,7 @@ Author      : Jon Freivald
 Date        : 10/17/2024
 Purpose     : Generate QR Codes
 Copyright   : 2024, Blue Ridge Medical Center
+Platform    : Microsoft Windows
 License     : MIT
 Change log  : at eof
 """
