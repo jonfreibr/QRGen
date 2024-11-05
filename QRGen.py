@@ -12,6 +12,7 @@ PySimpleGUI_License = 'eEygJDMKaqWCNxlnb8nCNQlXViHAlWwQZrSVI66MIgkuRhpncx3hRhyza
 
 import PySimpleGUI as sg
 import segno
+from segno import helpers
 import os
 import subprocess
 
@@ -26,11 +27,12 @@ BRMC = {'BACKGROUND': '#73afb6',
                  }
 sg.theme_add_new('BRMC', BRMC)
 
-progver = 'v 0.2'
+progver = 'v 0.3'
 mainTheme = 'BRMC'
 errorTheme = 'HotDogStand'
 
 def make_code():
+    qrcode=False
     name = subprocess.check_output(
         'net user "%USERNAME%" /domain | find /I "Full Name"', shell=True, text=True
     )
@@ -39,10 +41,19 @@ def make_code():
     sg.theme(mainTheme)
     layout = [ [sg.Text(f"Welcome {first_name}")],
               [sg.Text("Data to encode: "), sg.InputText(size=(80,None), key='qrdat')],
+              [sg.Text("--OR--")],
+              [sg.Text("Name:             "), sg.InputText(size=(60,None), key='vCname'), sg.Text('Format: "Last; First"')],
+              [sg.Text("Display Name: "), sg.InputText(size=(60,None), key='vCdname')],
+              [sg.Text("Org:                "), sg.InputText(size=(60,None), key='vCorg')],
+              [sg.Text("Job Title:         "), sg.InputText(size=(60,None), key='vCrole')],
+              [sg.Text("Phone:            "), sg.InputText(size=(14,None), key='vCphone')],
+              [sg.Text("EMail:             "), sg.InputText(size=(50,None), key='vCemail')],
+              [sg.Text("URL:               "), sg.InputText(size=(60,None), key='vCurl')],
+              [sg.Text("--AND--")],
               [sg.Text("Filename: "), sg.InputText(size=(40,None), key='filnam'), sg.Text(".png")],
-              [sg.Button('Create'), sg.Button('Done')],
+              [sg.Button('Create', bind_return_key=True), sg.Button('Done')],
               [sg.Text("", key='msg')]]
-    window = sg.Window(f"Create QR Code {progver}", layout, element_justification='center', modal=True, finalize=True)
+    window = sg.Window(f"Create QR Code {progver}", layout, element_justification='left', modal=True, finalize=True)
     window.BringToFront()
     window['qrdat'].set_focus()
     while True:
@@ -53,17 +64,27 @@ def make_code():
         if event == 'Create':
             window['msg'].update("")
             if values['qrdat']:
-                if values['filnam']:
-                    fileroot = values['filnam']
-                    file = f'{os.path.expanduser("~")}/Downloads/{fileroot}.png'
-                    qrcode = segno.make_qr(values['qrdat'])
-                    qrcode.save(
-                        file,
-                        scale=5,
-                    )
-                    window['msg'].update(f"QR Code saved to: {file}")
+                qrcode = segno.make_qr(values['qrdat'])
+            elif values['vCname']:
+                qrcode = helpers.make_vcard(name=values['vCname'], displayname=values['vCdname'], org=values['vCorg'], title=values['vCrole'],
+                                            phone=values['vCphone'], email=values['vCemail'], url=values['vCurl'])
+            if values['filnam'] and qrcode:
+                fileroot = values['filnam']
+                file = f'{os.path.expanduser("~")}/Downloads/{fileroot}.png'
+                qrcode.save(
+                    file,
+                    scale=5,
+                )
+                window['msg'].update(f"QR Code saved to: {file}")
             window['qrdat'].update("")
             window['filnam'].update("")
+            window['vCname'].update("")
+            window['vCdname'].update("")
+            window['vCorg'].update("")
+            window['vCrole'].update("")
+            window['vCphone'].update("")
+            window['vCemail'].update("")
+            window['vCurl'].update("")
 
 
 
@@ -74,4 +95,5 @@ if __name__ == '__main__':
 v 0.1   : 10/17/24  : Initial version -- PySimpleGUI wrapper around segno library to generate QR codes.
 v 0.2   : 10/18/24  : Fleshed it out a little -- won't create an empty file, saves to (Windows) users Downloads directory, 
                     : greets user by name.
+v 0.3   : 11/5/24   : Added the ability to create a vCard.
 """
