@@ -51,6 +51,7 @@ def make_code():
               [sg.Text("URL:               "), sg.InputText(size=(60,None), key='vCurl')],
               [sg.Text("--AND--", text_color='red', background_color='yellow')],
               [sg.Text("Filename: "), sg.InputText(size=(40,None), key='filnam'), sg.Text(".png")],
+              [sg.Text("--THEN--", text_color='red', background_color='yellow')],
               [sg.Button('Create', bind_return_key=True, button_color=('yellow', 'green')), sg.Button('Done', button_color=('yellow', 'red'))],
               [sg.Text("", key='msg')]]
     window = sg.Window(f"Create QR Code {progver}", layout, element_justification='left', modal=True, finalize=True)
