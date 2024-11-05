@@ -27,7 +27,7 @@ BRMC = {'BACKGROUND': '#73afb6',
                  }
 sg.theme_add_new('BRMC', BRMC)
 
-progver = 'v 0.4'
+progver = 'v 0.5'
 mainTheme = 'BRMC'
 errorTheme = 'HotDogStand'
 
@@ -39,21 +39,41 @@ def make_code():
     full_name = name.replace("Full Name", "").strip()
     first_name = full_name.split()[0]
     sg.theme(mainTheme)
-    layout = [ [sg.Text(f"Welcome {first_name}")],
-              [sg.Text("Data to encode: "), sg.InputText(size=(80,None), key='qrdat')],
-              [sg.Text("--OR--", text_color='red', background_color='yellow')],
-              [sg.Text("Name:             "), sg.InputText(size=(60,None), key='vCname'), sg.Text('Format: "Last; First"')],
-              [sg.Text("Display Name: "), sg.InputText(size=(60,None), key='vCdname')],
-              [sg.Text("Org:                "), sg.InputText(size=(60,None), key='vCorg')],
-              [sg.Text("Job Title:         "), sg.InputText(size=(60,None), key='vCrole')],
-              [sg.Text("Phone:            "), sg.InputText(size=(14,None), key='vCphone')],
-              [sg.Text("EMail:             "), sg.InputText(size=(50,None), key='vCemail')],
-              [sg.Text("URL:               "), sg.InputText(size=(60,None), key='vCurl')],
-              [sg.Text("--AND--", text_color='red', background_color='yellow')],
-              [sg.Text("Filename: "), sg.InputText(size=(40,None), key='filnam'), sg.Text(".png")],
-              [sg.Text("--THEN--", text_color='red', background_color='yellow')],
-              [sg.Button('Create', bind_return_key=True, button_color=('yellow', 'green')), sg.Button('Done', button_color=('yellow', 'red'))],
-              [sg.Text("", key='msg')]]
+    col1 = [
+            [sg.Text(f"Welcome {first_name}")],
+            [sg.Text("Data to encode: ")],
+            [sg.Text("--OR--", text_color='red', background_color='yellow')],
+            [sg.Text("Name (Required):")],
+            [sg.Text("Display Name:")],
+            [sg.Text("Org:")],
+            [sg.Text("Job Title:")],
+            [sg.Text("Phone:")],
+            [sg.Text("EMail:")],
+            [sg.Text("URL:")],
+            [sg.Text("--AND--", text_color='red', background_color='yellow')],
+            [sg.Text("Filename:")],
+            [sg.Text("--THEN--", text_color='red', background_color='yellow')],
+            [sg.Button('Create', bind_return_key=True, button_color=('yellow', 'green')), sg.Button('Done', button_color=('yellow', 'red'))],
+        ]
+    col2 = [
+            [sg.Text("")],
+            [sg.InputText(size=(80,None), key='qrdat')],
+            [sg.Text("")],
+            [sg.InputText(size=(60,None), key='vCname'), sg.Text('Format: "Last; First"')],
+            [sg.InputText(size=(60,None), key='vCdname')],
+            [sg.InputText(size=(60,None), key='vCorg')],
+            [sg.InputText(size=(60,None), key='vCrole')],
+            [sg.InputText(size=(14,None), key='vCphone')],
+            [sg.InputText(size=(50,None), key='vCemail')],
+            [sg.InputText(size=(60,None), key='vCurl')],
+            [sg.Text("")],
+            [sg.InputText(size=(40,None), key='filnam'), sg.Text(".png")],
+            [sg.Text("")],
+            [sg.Text("", key='msg')],
+        ]
+    layout = [
+        [sg.Column(col1), sg.Column(col2)]
+    ]
     window = sg.Window(f"Create QR Code {progver}", layout, element_justification='left', modal=True, finalize=True)
     window.BringToFront()
     window['qrdat'].set_focus()
@@ -98,4 +118,5 @@ v 0.2   : 10/18/24  : Fleshed it out a little -- won't create an empty file, sav
                     : greets user by name.
 v 0.3   : 11/5/24   : Added the ability to create a vCard.
 v 0.4   : 11/5/24   : Simple UI tweaks
+v 0.5   : 11/5/24   : Total UI overhaul.
 """
