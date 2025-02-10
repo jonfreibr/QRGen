@@ -28,7 +28,7 @@ BRMC = {'BACKGROUND': '#73afb6',
                  }
 sg.theme_add_new('BRMC', BRMC)
 
-progver = 'v 0.5'
+progver = 'v 1.0'
 mainTheme = 'BRMC'
 errorTheme = 'HotDogStand'
 
@@ -49,6 +49,10 @@ def make_code():
             [sg.Text("Org:")],
             [sg.Text("Job Title:")],
             [sg.Text("Phone:")],
+            [sg.Text("Cell Phone:")],
+            [sg.Text("P.O. Box:")],
+            [sg.Text("Street Address:")],
+            [sg.Text("City, State, Zip Code:")],
             [sg.Text("EMail:")],
             [sg.Text("URL:")],
             [sg.Text("--AND--", text_color='red', background_color='yellow')],
@@ -65,6 +69,10 @@ def make_code():
             [sg.InputText(size=(60,None), key='vCorg')],
             [sg.InputText(size=(60,None), key='vCrole')],
             [sg.InputText(size=(14,None), key='vCphone')],
+            [sg.InputText(size=(14,None), key='vCcphone')],
+            [sg.InputText(size=(40,None), key='vCpobox')],
+            [sg.InputText(size=(60,None), key='vCstreet')],
+            [sg.InputText(size=(30,None), key='vCcity'), sg.InputText(size=(3,None), key='vCstate'), sg.InputText(size=(12,None), key='vCzip')],
             [sg.InputText(size=(50,None), key='vCemail')],
             [sg.InputText(size=(60,None), key='vCurl')],
             [sg.Text("")],
@@ -89,7 +97,9 @@ def make_code():
                 qrcode = segno.make_qr(values['qrdat'])
             elif values['vCname']:
                 qrcode = helpers.make_vcard(name=values['vCname'], displayname=values['vCdname'], org=values['vCorg'], title=values['vCrole'],
-                                            phone=values['vCphone'], email=values['vCemail'], url=values['vCurl'])
+                                            phone=values['vCphone'], cellphone=values['vCcphone'], pobox=values['vCpobox'],
+                                            street=values['vCstreet'], city=values['vCcity'], region=values['vCstate'],
+                                            zipcode=values['vCzip'], email=values['vCemail'], url=values['vCurl'])
             if values['filnam'] and qrcode:
                 fileroot = values['filnam']
                 file = f'{os.path.expanduser("~")}/Downloads/{fileroot}.png'
@@ -105,6 +115,12 @@ def make_code():
             window['vCorg'].update("")
             window['vCrole'].update("")
             window['vCphone'].update("")
+            window['vCcphone'].update("")
+            window['vCpobox'].update("")
+            window['vCstreet'].update("")
+            window['vCcity'].update("")
+            window['vCstate'].update("")
+            window['vCzip'].update("")
             window['vCemail'].update("")
             window['vCurl'].update("")
 
@@ -120,4 +136,5 @@ v 0.2   : 10/18/24  : Fleshed it out a little -- won't create an empty file, sav
 v 0.3   : 11/5/24   : Added the ability to create a vCard.
 v 0.4   : 11/5/24   : Simple UI tweaks
 v 0.5   : 11/5/24   : Total UI overhaul.
+v 1.0   : 11/13/24  : Added address and cell phone to vCard.
 """
