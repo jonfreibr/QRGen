@@ -1,2 +1,2 @@
-PySimpleGUI==5.0.3
+rsa==4.9
 segno==1.6.1
