@@ -11,10 +11,10 @@ rem
 echo Installing Python 3.11.5
 "%~dp0\python-3.11.5-amd64.exe" /passive
 echo upgrading pip
-%LocalAppData%\Programs\Python\Python311\python.exe -m pip install --upgrade pip -q
+%LocalAppData%\Programs\Python\Python311\python.exe -m pip install --upgrade pip
 echo Adding package requirements
-%LocalAppData%\Programs\Python\Python311\Scripts\pip.exe install -r "%~dp0\requirements.txt" -q
-%LocalAppData%\Programs\Python\Python311\Scripts\pip.exe install -i https://PySimpleGUI.net/install PySimpleGUI -q
+%LocalAppData%\Programs\Python\Python311\Scripts\pip.exe install -r "%~dp0\requirements.txt"
+%LocalAppData%\Programs\Python\Python311\Scripts\pip.exe install -i https://PySimpleGUI.net/install PySimpleGUI
 echo Copying shortcut to Desktop
 copy /y "%~dp0\QR Generator.lnk" %USERPROFILE%\Desktop > nul 2>&1
 echo Done with installation
