@@ -28,12 +28,13 @@ BRMC = {'BACKGROUND': '#73afb6',
                  }
 sg.theme_add_new('BRMC', BRMC)
 
-progver = 'v 1.0'
+progver = 'v 1.1'
 mainTheme = 'BRMC'
 errorTheme = 'HotDogStand'
 
 def make_code():
     qrcode=False
+    wifisec_options = ['WPA', 'WEP', 'nopass']
     name = subprocess.check_output(
         'net user "%USERNAME%" /domain | find /I "Full Name"', shell=True, text=True
     )
@@ -43,6 +44,10 @@ def make_code():
     col1 = [
             [sg.Text(f"Welcome {first_name}")],
             [sg.Text("Data to encode: ")],
+            [sg.Text("--OR--", text_color='red', background_color='yellow')],
+            [sg.Text("WiFi SSID:")],
+            [sg.Text("WiFi Password:")],
+            [sg.Text("WiFi Security:")],
             [sg.Text("--OR--", text_color='red', background_color='yellow')],
             [sg.Text("Name (Required):")],
             [sg.Text("Display Name:")],
@@ -63,6 +68,10 @@ def make_code():
     col2 = [
             [sg.Text("")],
             [sg.InputText(size=(80,None), key='qrdat')],
+            [sg.Text("")],
+            [sg.InputText(size=(60,None), key='wfssid')],
+            [sg.InputText(size=(60,None), key='wfpass')],
+            [sg.Combo(wifisec_options,default_value=wifisec_options[0], key='wfsec')],
             [sg.Text("")],
             [sg.InputText(size=(60,None), key='vCname'), sg.Text('Format: "Last; First"')],
             [sg.InputText(size=(60,None), key='vCdname')],
@@ -100,6 +109,13 @@ def make_code():
                                             phone=values['vCphone'], cellphone=values['vCcphone'], pobox=values['vCpobox'],
                                             street=values['vCstreet'], city=values['vCcity'], region=values['vCstate'],
                                             zipcode=values['vCzip'], email=values['vCemail'], url=values['vCurl'])
+            elif values['wfssid']:
+                wifi_settings = {
+                    'ssid': values['wfssid'],
+                    'password': values['wfpass'],
+                    'security': values['wfsec']
+                }
+                qrcode = helpers.make_wifi(**wifi_settings)
             if values['filnam'] and qrcode:
                 fileroot = values['filnam']
                 file = f'{os.path.expanduser("~")}/Downloads/{fileroot}.png'
@@ -137,4 +153,5 @@ v 0.3   : 11/5/24   : Added the ability to create a vCard.
 v 0.4   : 11/5/24   : Simple UI tweaks
 v 0.5   : 11/5/24   : Total UI overhaul.
 v 1.0   : 11/13/24  : Added address and cell phone to vCard.
+v 1.1   : 10/10/25  : Added WiFi QR Code generator.
 """
