@@ -16,6 +16,9 @@ import segno
 from segno import helpers
 import os
 import subprocess
+from sys import platform
+import atexit
+from datetime import datetime
 
 BRMC = {'BACKGROUND': '#73afb6',
                  'TEXT': '#00446a',
@@ -28,10 +31,33 @@ BRMC = {'BACKGROUND': '#73afb6',
                  }
 sg.theme_add_new('BRMC', BRMC)
 
-progver = 'v 1.1'
+progver = 'v 1.1a'
 mainTheme = 'BRMC'
 errorTheme = 'HotDogStand'
 
+# --------------------------------------------------
+def do_update():
+    sg.theme('Kayak')
+    layout = [ [sg.Text('There is an update available for the IQT application.')],
+                [sg.Text('Automatic updates are only available for Windows at this time.')],
+                [sg.Text('Other platforms please check with your systems administrator.')],
+                [sg.Button("Update"), sg.Button("Skip")]]
+    window = sg.Window("Updates", layout)
+    while True:
+        event, values = window.read()
+
+        if event in (sg.WIN_CLOSED, 'Skip'):
+            atexit.unregister(update_app)
+            window.close()
+            break
+        if event == "Update":
+            exit()
+
+# --------------------------------------------------
+def update_app():
+    if platform == "win32":
+        subprocess.Popen(["cmd", "/c", "H:/_BRMCApps/QR Code Generator/install.bat", "/min"], stdout=None, stderr=None)
+# --------------------------------------------------
 def make_code():
     qrcode=False
     wifisec_options = ['WPA', 'WEP', 'nopass']
@@ -139,10 +165,15 @@ def make_code():
             window['vCzip'].update("")
             window['vCemail'].update("")
             window['vCurl'].update("")
-
-
-
+# --------------------------------------------------
 if __name__ == '__main__':
+    try:
+        if platform == "win32":
+            if datetime.fromtimestamp(os.path.getmtime(__file__)).strftime("%m/%d/%y @ %H:%M:%S") < datetime.fromtimestamp(os.path.getmtime('H:/_BRMCApps/QR Code Generator/QRGen.py')).strftime("%m/%d/%y @ %H:%M:%S"):
+                atexit.register(update_app)
+                do_update()
+    except:
+        pass
     make_code()
 
 """
@@ -154,4 +185,5 @@ v 0.4   : 11/5/24   : Simple UI tweaks
 v 0.5   : 11/5/24   : Total UI overhaul.
 v 1.0   : 11/13/24  : Added address and cell phone to vCard.
 v 1.1   : 10/10/25  : Added WiFi QR Code generator.
+v 1.1a  : 10/13/25  : Added application auto-update.
 """
