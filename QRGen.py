@@ -54,10 +54,13 @@ def do_update():
             exit()
 
 # --------------------------------------------------
+
 def update_app():
     if platform == "win32":
         subprocess.Popen(["cmd", "/c", "H:/_BRMCApps/QR Code Generator/install.bat", "/min"], stdout=None, stderr=None)
+
 # --------------------------------------------------
+
 def make_code():
     qrcode=False
     wifisec_options = ['WPA', 'WEP', 'nopass']
@@ -165,7 +168,9 @@ def make_code():
             window['vCzip'].update("")
             window['vCemail'].update("")
             window['vCurl'].update("")
+
 # --------------------------------------------------
+
 if __name__ == '__main__':
     try:
         if platform == "win32":
