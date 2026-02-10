@@ -14,6 +14,7 @@ from segno import helpers
 import os
 import subprocess
 from sys import platform
+import sys
 import atexit
 from datetime import datetime
 
@@ -28,7 +29,7 @@ BRMC = {'BACKGROUND': '#73afb6',
                  }
 sg.theme_add_new('BRMC', BRMC)
 
-progver = 'v 1.1b'
+progver = 'v 1.1c'
 mainTheme = 'BRMC'
 errorTheme = 'HotDogStand'
 
@@ -111,7 +112,7 @@ def make_code():
             [sg.InputText(size=(50,None), key='vCemail')],
             [sg.InputText(size=(60,None), key='vCurl')],
             [sg.Text("")],
-            [sg.InputText(size=(40,None), key='filnam'), sg.Text(".png")],
+            [sg.InputText(size=(40,None), key='filnam'), sg.Text(".png (will be in your Downloads folder)")],
             [sg.Text("")],
             [sg.Text("", key='msg')],
         ]
@@ -169,14 +170,19 @@ def make_code():
 # --------------------------------------------------
 
 if __name__ == '__main__':
+    answer = False
     try:
         if platform == "win32":
-            if datetime.fromtimestamp(os.path.getmtime(__file__)).strftime("%m/%d/%y @ %H:%M:%S") < datetime.fromtimestamp(os.path.getmtime('H:/_BRMCApps/QR Code Generator/QRGen.py')).strftime("%m/%d/%y @ %H:%M:%S"):
+            if datetime.fromtimestamp(os.path.getmtime(__file__)) < datetime.fromtimestamp(os.path.getmtime('H:/_BRMCApps/QR Code Generator/QRGen.py')):
                 atexit.register(update_app)
-                do_update()
+                answer = do_update()
     except:
         pass
-    make_code()
+
+    if answer:
+        sys.exit()
+    else:
+        make_code()
 
 """
 v 0.1   : 10/17/24  : Initial version -- PySimpleGUI wrapper around segno library to generate QR codes.
@@ -189,4 +195,5 @@ v 1.0   : 11/13/24  : Added address and cell phone to vCard.
 v 1.1   : 10/10/25  : Added WiFi QR Code generator.
 v 1.1a  : 10/13/25  : Added application auto-update.
 v 1.1b  : 02/09/26  : Removed PySimpleGUI v5 license key, converted to PySimpleGUI-4-foss.
+v 1.1c  : 02/10/26  : simple UI update
 """

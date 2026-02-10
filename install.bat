@@ -97,7 +97,7 @@ if %errorlevel% neq 0 (
 )
 echo.
 
-echo Launching Insurance Query Tool...
+echo Launching QR Code Generator...
 start "" "%SHORTCUT_PATH%"
 echo.
 
