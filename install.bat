@@ -73,13 +73,14 @@ if exist "%~dp0\requirements.txt" (
 echo Deactivating virtual environment...
 call deactivate
 
-copy "%~dp0\QRGen.py" "%PROJECT_DIR%"
+copy /y "%~dp0\QRGen.py" "%PROJECT_DIR%"
+copy /y "%~dp0\qrgen.ico" "%PROJECT_DIR%"
 
 echo Creating desktop shortcut...
 set "SHORTCUT_PATH=%USERPROFILE%\Desktop\QR Generator.lnk"
 set "TARGET_PATH=%PROJECT_DIR%\QRGen.py"
 set "WORKING_DIR=%PROJECT_DIR%"
-set "ICON_PATH=%~dp0icon.ico"
+set "ICON_PATH=%PROJECT_DIR%\qrgen.ico"
 
 powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command ^
   "$s=(New-Object -COM WScript.Shell).CreateShortcut('%SHORTCUT_PATH%');" ^

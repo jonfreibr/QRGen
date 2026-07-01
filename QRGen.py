@@ -29,7 +29,7 @@ BRMC = {'BACKGROUND': '#73afb6',
                  }
 sg.theme_add_new('BRMC', BRMC)
 
-progver = 'v 1.1c'
+progver = 'v 1.1d'
 mainTheme = 'BRMC'
 errorTheme = 'HotDogStand'
 
@@ -119,7 +119,7 @@ def make_code():
     layout = [
         [sg.Column(col1), sg.Column(col2)]
     ]
-    window = sg.Window(f"Create QR Code {progver}", layout, element_justification='left', modal=True, finalize=True)
+    window = sg.Window(f"Create QR Code {progver}", layout, element_justification='left', modal=True, icon='qrgen.ico', finalize=True)
     window.BringToFront()
     window['qrdat'].set_focus()
     while True:
@@ -196,4 +196,5 @@ v 1.1   : 10/10/25  : Added WiFi QR Code generator.
 v 1.1a  : 10/13/25  : Added application auto-update.
 v 1.1b  : 02/09/26  : Removed PySimpleGUI v5 license key, converted to PySimpleGUI-4-foss.
 v 1.1c  : 02/10/26  : simple UI update
+v 1.1d  : 07/01/26  : added window title and task bar icon
 """
