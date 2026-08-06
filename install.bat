@@ -6,13 +6,13 @@ rem Run from the application directory
 rem Required files:
 rem     QR Generator.lnk            create this shortcut file to reflect your installation and runtime requirements!!
 rem     QRGen.py                    The main application file
-rem     python-3.11.5-amd64.exe     The Python source file
+rem     python-3.14.0-amd64.exe     The Python source file
 rem     requirements.txt            Used by Python to install required libraries
 rem     unattend.xml                Required to run a "hands-off" install of Python.
 rem
 echo Sourcing from: %~dp0
 
-set "TARGET_VER=3.11.5"
+set "TARGET_VER=3.14.0"
 
 :: Prevent early exit on errors
 set "ERRORFLAG=0"
@@ -34,8 +34,8 @@ if %errorlevel% neq 0 (
 )
 
 if "%INSTALL%" equ "TRUE" (
-	"%~dp0\python-3.11.5-amd64.exe" /passive
-	set "PYTHON_PATH=%LocalAppData%\Programs\Python\Python311\python.exe"
+	"%~dp0\python-%TARGET_VER%-amd64.exe" /passive
+	set "PYTHON_PATH=%LocalAppData%\Programs\Python\Python314\python.exe"
 )
 
 set "PROJECT_DIR=%USERPROFILE%\QRGen"
