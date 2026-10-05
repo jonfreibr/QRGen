@@ -13,6 +13,7 @@ rem
 echo Sourcing from: %~dp0
 
 set "TARGET_VER=3.14.0"
+set "BASE_DIR=314"
 
 :: Prevent early exit on errors
 set "ERRORFLAG=0"
@@ -35,7 +36,7 @@ if %errorlevel% neq 0 (
 
 if "%INSTALL%" equ "TRUE" (
 	"%~dp0\python-%TARGET_VER%-amd64.exe" /passive
-	set "PYTHON_PATH=%LocalAppData%\Programs\Python\Python314\python.exe"
+	set "PYTHON_PATH=%LocalAppData%\Programs\Python\Python%BASE_DIR%\python.exe"
 )
 
 set "PROJECT_DIR=%USERPROFILE%\QRGen"

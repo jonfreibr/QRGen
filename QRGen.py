@@ -29,7 +29,7 @@ BRMC = {'BACKGROUND': '#73afb6',
                  }
 sg.theme_add_new('BRMC', BRMC)
 
-progver = 'v 1.1d'
+progver = 'v 1.1e'
 mainTheme = 'BRMC'
 errorTheme = 'HotDogStand'
 
@@ -62,11 +62,14 @@ def update_app():
 def make_code():
     qrcode=False
     wifisec_options = ['WPA', 'WEP', 'nopass']
-    name = subprocess.check_output(
-        'net user "%USERNAME%" /domain | find /I "Full Name"', shell=True, text=True
-    )
-    full_name = name.replace("Full Name", "").strip()
-    first_name = full_name.split()[0]
+    try:
+        name = subprocess.check_output(
+            'net user "%USERNAME%" /domain | find /I "Full Name"', shell=True, text=True
+        )
+        full_name = name.replace("Full Name", "").strip()
+        first_name = full_name.split()[0]
+    except:
+        first_name = ""
     sg.theme(mainTheme)
     col1 = [
             [sg.Text(f"Welcome {first_name}")],
@@ -197,4 +200,5 @@ v 1.1a  : 10/13/25  : Added application auto-update.
 v 1.1b  : 02/09/26  : Removed PySimpleGUI v5 license key, converted to PySimpleGUI-4-foss.
 v 1.1c  : 02/10/26  : simple UI update
 v 1.1d  : 07/01/26  : added window title and task bar icon
+v 1.1e  : 10/05/26  : Placed user name extraction into try/except block to accomodate non-domain users
 """
